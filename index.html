@@ -10,22 +10,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <title>Weather App</title>
     <style>
         body{
             font-family: 'Sono', sans-serif;
             background-color:#D6D7DB;
         }
+        /* whole background card
+            Making the color to darkgray 
+        */
         #main-card{
+            width: 100%;
+            height:90%;
             background-color: #F7F6F9;
-            color: darkgray;
             border-radius: 30px;
-            box-shadow: 0 10px 60px rgb(39, 39, 39);
+            box-shadow: 0px 20px 60px rgba(39, 39, 39, 0.432);
         }
         .side-bar{
             border-radius: 20px 0px 0px 20px;
             background-color: white;
         }
+        /* Top Left search card */
+        .search-card{
+            color:black;
+        }
+        .search-bar-css{
+            border-width: 0px;
+            
+        }
+        /* Main Weather section */
+        .main-weather-image{
+
+            /* filter:drop-shadow(0px 20px 60px ); */
+
+        }
+        .temperature-box{
+            align-content: start;
+        }
+        .main-temperature span{
+            font-size: 1rem;
+        }
+        .main-temperature{
+            font-size:4rem;
+        }
+        
     </style>
     
 </head>
@@ -33,20 +62,31 @@
     <div id="demo"></div>
     <div class="container d-flex justify-content-center align-items-center" style="height: 100vh">
         <div id="main-card" class="row">
-            <div class="col-3 side-bar">
-                <div class="container" style ="width:200vh; height:90vh;">
+            <!-- Left side panel -->
+            <div class="col-lg-3 col-md-4 col-sm-12 side-bar">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-12">
-                            <input type="text" placeholder="Search for places..">
+                            <!-- Top Search bar on left side -->
+                            <div class="search-card d-flex py-md-5 justify-content-center align-items-center">
+                                <i class="bi bi-search px-2"></i>
+                                <input class="search-bar-css form-control-sm" type="text" placeholder="Search for places.."> 
+                                <i class="bi bi-geo-alt"></i>   
+                            </div>
                         </div>
                         <div class="col-12">
-    
+                            <div class="d-flex justify-content-center">
+                                <image class="main-weather-image" src="Weather Icons/DayLight/partly_cloudy.png"></image>
+                            </div>
+                        </div>
+                        <div class="col-12 temperature-box">
+                            <span class="main-temperature d-flex align-items-start" for="temperature">12<span>°C</span></span>
                         </div>
                     </div>
                 </div>
                 
             </div>
-            <div class="col-9 main-screen">Tab</div>
+            <div class="col main-screen">Tab</div>
         </div>
     </div>
 </html>
