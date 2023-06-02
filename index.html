@@ -9,72 +9,30 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sono:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link rel="stylesheet" href="src/css/style.css">
     <title>Weather App</title>
-    <style>
-        body{
-            /* font-family: 'Sono', sans-serif; */
-            background-color:#D6D7DB;
-        }
-        /* whole background card
-            Making the color to darkgray 
-        */
-        #main-card{
-            width: 90%;
-            height:90%;
-            background-color: #F7F6F9;
-            border-radius: 30px;
-            box-shadow: 0px 20px 60px rgba(39, 39, 39, 0.432);
-        }
-        .main-screen{
-            border-radius: 30px;
-            background-color: #F7F6F9;
-        }
-        .side-bar{
-            border-radius: 30px;
-            background-color: white;
-        }
-        /* Top Left search card */
-        .search-card{
-            color:black;
-        }
-        .search-bar-css{
-            border-width: 0px;
-        }
-
-        .rs-control .rs-range-color {
-            background-color: #f5bd00;
-        }
-        .rs-control .rs-path-color {
-            background-color: gainsboro;
-        }
-        .rs-control .rs-border{
-            border: none;
-        }
-        .rs-control .rs-tooltip-text{
-            font-size:2rem;
-        }
-    </style>
 </head>
-<body ng-app="WeatherApp">
+<body>  
     <div id="demo"></div>
-    <div class="container-fluid d-flex justify-content-center align-items-center" style="height: 100vh">
-        <div id="main-card" class="row">
+    <div class="container-fluid d-flex justify-content-center align-items-center py-5" style="height: 100vh">
+        <div id="main-card" class="row" ng-app="weatherApp">
             <!-- Left side panel -->
-            <div class="col-xxl-3 col-xl-4 col-lg-4 col-md-6 col-sm-12 side-bar py-md-0 py-4">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 side-bar py-md-0 py-4">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col d-flex align-items-stretch flex-column justify-content-between">
                             <div class="row">
                                 <div class="col-12">
                                     <!-- Top Search bar on left side -->
-                                    <div class="search-card d-flex py-md-5 py-4 align-items-center ">
+                                    <div class="search-card d-flex py-md-5 py-4 align-items-center" ng-controller="searchCtrl">
                                         <!-- Search Icon -->
-                                        <i class="bi bi-search d-flex justify-content-start px-2"></i>
-                                        <input class="search-bar-css form-control-sm d-flex justify-content-center" type="text" placeholder="Search for places.."> 
-                                        <i onclick="getLocation()" class="bi bi-geo-alt"></i>   
+                                        <i class="bi bi-buildings d-flex justify-content-start px-2"></i>
+                                        <input ng-model="searchField" class="search-bar-css form-control-sm d-flex justify-content-center" type="text" placeholder="Search for places.."> 
+                                        <i ng-click="searchCity()" class="bi bi-search geo-button rounded-circle d-flex justify-content-center align-items-center" style="height:30px;width:30px"></i>   
+                                        <i onclick="getLocation()" class="bi bi-geo-alt geo-button rounded-circle d-flex justify-content-center align-items-center" style="height:30px;width:30px"></i>   
                                     </div>
                                 </div>
                             </div>
@@ -82,23 +40,23 @@
                                 <div class="col-12">
                                     <!-- Weather Icon Image which is to be updated on change of the weather condition -->
                                     <div class="d-flex justify-content-center py-md-0 py-4">
-                                        <image class="main-weather-image" src="Weather Icons/DayLight/partly_cloudy.png"></image>
+                                        <image id="weatherImage" src="#"></image>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <!-- Temperature in either °C or °F -->
                                 <div class="col-12 temperature-box d-flex justify-content-md-start justify-content-center">
-                                    <span class="text-wrap lh-1" for="temperature" style="font-size:4rem;">12</span>
+                                    <span id="currentTemp" class="text-wrap lh-1" style="font-size:4rem;">?</span>
                                     <span>°C</span>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12 d-flex justify-content-md-start justify-content-center">
+                                <div class="col-12 d-flex justify-content-md-start justify-content-center" ng-controller="datCtrl">
                                     <!-- Current day -->
-                                    <p for="current-day">Monday, </p>
+                                    <p>{{ day }}</p>
                                     <!-- Current Time -->
-                                    <span class="text-muted"> 16:00</span>
+                                    <p class="text-muted">{{ time }}</p>
                                 </div>
                             </div>
                             <div class="row">
@@ -112,7 +70,7 @@
                                 <div class="col-12 d-flex justify-content-md-start justify-content-center">
                                     <div class="d-flex py-md-1 py-4">
                                         <i class="bi bi-cloud px-2"></i>
-                                        <label>Mostly Cloudy</label>
+                                        <label id="weatherDescription">?</label>
                                     </div>
                                 </div>
                             </div>
@@ -121,7 +79,7 @@
                                 <div class="col-12 d-flex justify-content-md-start justify-content-center">
                                     <div class="d-flex justify-content-center py-md-1 py-4">
                                         <i class="bi bi-rainbow px-2" style="color:blue"></i>
-                                        <label>Rain - 30%</label>
+                                        <label id="preciptation">? - ?%</label>
                                     </div>
                                 </div>
                             </div>
@@ -129,8 +87,8 @@
                                 <div class="col-12">
                                     <!-- The picture of the city along with the City and Country Name -->
                                     <div class="container-fluid d-flex m-0 p-4 align-items-center justify-content-center">
-                                        <image class="main-weather-image" src="https://loremflickr.com/250/100" style="border-radius:20px"></image>
-                                        <h4 style="position:absolute; color:white;">New York, NY, USA</h4>
+                                        <img src="https://picsum.photos/250/100?random=1" style="border-radius:20px">
+                                        <h4 id="city-country" style="position:absolute; color:white;">?, ?</h4>
                                     </div>
                                 </div>
                             </div>
@@ -138,134 +96,118 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-9 col-xl-8 col-lg-8 col-md-6 col-sm-12 main-screen">
+            <div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 main-screen">
                 <div class="container py-md-5 py-4">
                     <div class="row">
                         <div class="col d-flex justify-content-start">
-                            <div class="row">
-                                <div class="col h4">Today</div>
-                                <div class="col h4">Week</div>
+                            <div class="row" style="color:darkgray">
+                                <div class="col h4 Underline-hover">Today</div>
+                                <div class="col h4 active Underline-hover">Week</div>
                             </div>
                         </div>
                         <div class="col d-flex justify-content-end">
                             <div class="row">
-                                <div class="col rounded-circle align-items-center d-flex" style="width: 40px;height:40px;background-color:black; color:white; border-radius: 100%;"><span>°C</span></div>
-                                <div class="col rounded-circle d-flex align-items-center">°F</div>
-                                <div class="col">Picture</div>
+                                <div class="col rounded-circle align-items-center d-flex justify-content-center " style="width: 40px;height:40px;background-color:black; color:white; border-radius: 100%;"><span>°C</span></div>
+                                <!-- <div class="col rounded-circle d-flex align-items-center">°F</div> -->
+                                <!-- <div class="col">Picture</div> -->
                             </div>
                         </div>
                     </div>
-                    <div class="row py-5" style="overflow:scroll">
+                    <div class="row g-4 py-5" style="overflow:scroll">
                         <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Sun</div>
+                                <div class="day col d-flex justify-content-center">?</div>
                             </div>
                             <div class="row py-2">
                                 <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/cloudy.png" style="max-width:60px"></image>
+                                    <image class="main-weather-image" src="#" style="max-width:60px"></image>
                                 </div>
                             </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
+                            <div class="row py-2">
+                                <div class="d-flex">
+                                    <p class="max-forcast col d-flex justify-content-center">?°</p>
+                                    <p class="min-forcast col d-flex justify-content-center text-muted">?°</p>
+                                </div>
                             </div>
                         </div>
                         <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Mon</div>
+                                <div class="day col d-flex justify-content-center">?</div>
                             </div>
                             <div class="row py-2">
                                 <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/rainy.png" style="max-width:60px"></image>
+                                    <image class="main-weather-image" src="#" style="max-width:60px"></image>
                                 </div>
                             </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
+                            <div class="row py-2">
+                                <div class="d-flex">
+                                    <p class="max-forcast col d-flex justify-content-center">?°</p>
+                                    <p class="min-forcast col d-flex justify-content-center text-muted">?°</p>
+                                </div>
                             </div>
                         </div>
                         <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Tue</div>
+                                <div class="day col d-flex justify-content-center">?</div>
                             </div>
                             <div class="row py-2">
                                 <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/thnderstorm.png" style="max-width:60px"></image>
+                                    <image class="main-weather-image" src="#" style="max-width:60px"></image>
                                 </div>
                             </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
+                            <div class="row py-2">
+                                <div class="d-flex">
+                                    <p class="max-forcast col d-flex justify-content-center">?°</p>
+                                    <p class="min-forcast col d-flex justify-content-center text-muted">?°</p>
+                                </div>
                             </div>
                         </div>
                         <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Wed</div>
+                                <div class="day col d-flex justify-content-center">?</div>
                             </div>
                             <div class="row py-2">
                                 <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/slight_touch_happyday.png" style="max-width:60px"></image>
+                                    <image class="main-weather-image" src="#" style="max-width:60px"></image>
                                 </div>
                             </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
+                            <div class="row py-2">
+                                <div class="d-flex">
+                                    <p class="max-forcast col d-flex justify-content-center">?°</p>
+                                    <p class="min-forcast col d-flex justify-content-center text-muted">?°</p>
+                                </div>
                             </div>
                         </div>
                         <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Thu</div>
+                                <div class="day col d-flex justify-content-center">?</div>
                             </div>
                             <div class="row py-2">
                                 <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/snowy.png" style="max-width:60px"></image>
+                                    <image class="main-weather-image" src="#" style="max-width:60px"></image>
                                 </div>
                             </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
+                            <div class="row py-2">
+                                <div class="d-flex">
+                                    <p class="max-forcast col d-flex justify-content-center">?°</p>
+                                    <p class="min-forcast col d-flex justify-content-center text-muted">?°</p>
+                                </div>
                             </div>
                         </div>
                         <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Fri</div>
+                                <div class="day col d-flex justify-content-center">?</div>
                             </div>
                             <div class="row py-2">
                                 <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/Rain_storm.png" style="max-width:60px"></image>
+                                    <image class="main-weather-image" src="#" style="max-width:60px"></image>
                                 </div>
                             </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
-                            </div>
-                        </div>
-                        <div class="col m-1" style="background-color:white; border-radius:20px">
                             <div class="row py-2">
-                                <div class="col d-flex justify-content-center">Sat</div>
-                            </div>
-                            <div class="row py-2">
-                                <div class="d-flex justify-content-center py-md-0 py-4">
-                                    <image class="main-weather-image" src="Weather Icons/DayLight/partly_cloudy.png" style="max-width:60px"></image>
+                                <div class="d-flex">
+                                    <p class="max-forcast col d-flex justify-content-center">?°</p>
+                                    <p class="min-forcast col d-flex justify-content-center text-muted">?°</p>
                                 </div>
-                            </div>
-                            <div class="row d-flex py-2">
-                                <p class="col d-flex justify-content-center">15°
-                                    <span class="text-muted"> -3°</span>
-                                </p>
-                                
                             </div>
                         </div>
                     </div>
@@ -294,13 +236,13 @@
                             <div class="row" style="height:120px">
                                 <div class="container-fluid d-flex align-items-center">
                                     <div class="col d-flex align-items-baseline justify-content-start px-3 py-md-0 py-4">
-                                        <div class="h1">7.70</div>
+                                        <div id="windSpeed" class="h1">?</div>
                                         <div class="h4">km/h</div>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <i class="bi bi-cloud px-3"></i>
-                                    <label>Mostly Cloudy</label>
+                                    <i class="bi bi-graph-up-arrow px-3"></i>
+                                    <label id="windDirection">?</label>
                                 </div>
                             </div>
                         </div>
@@ -311,13 +253,13 @@
                             <div class="row" style="height:120px">
                                 <div class="container-fluid d-flex align-items-center">
                                     <div class="col d-flex justify-content-start px-3 py-md-0 py-4">
-                                        <div class="h1">11</div>
+                                        <div id="currentFeelsLike" class="h1">?</div>
                                         <div class="h4">°C</div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <i class="bi bi-sun px-3"></i>
-                                    <label>Mostly Cloudy</label>
+                                    <label id="feelDescription">?</label>
                                 </div>
                             </div>
                         </div>
@@ -330,12 +272,12 @@
                             <div class="row" style="height:120px">
                                 <div class="container-fluid d-flex align-items-center">
                                     <div class="col d-flex justify-content-start px-3 py-md-0 py-4">
-                                        <div class="h1">12</div>
+                                        <div id="currentHumidity" class="h1">?</div>
                                         <div class="h4">%</div>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <label class="px-3">Normal</label>
+                                    <label id="humidityDescription" class="px-3">?</label>
                                     <i class="bi bi-droplet"></i>
                                 </div>
                             </div>
@@ -347,12 +289,12 @@
                             <div class="row" style="height:120px">
                                 <div class="container-fluid d-flex align-items-center">
                                     <div class="col d-flex align-items-baseline justify-content-start px-3 py-md-0 py-4">
-                                        <div class="h1">5.2</div>
+                                        <div id="currentVisibility" class="h1">?</div>
                                         <div class="h4">km</div>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <label class="px-3">Average</label>
+                                    <label id="visibilityDescription" class="px-3">?</label>
                                     <i class="bi bi-eye"></i>
                                 </div>
                             </div>
@@ -364,11 +306,11 @@
                             <div class="row" style="height:120px">
                                 <div class="container-fluid d-flex align-items-center">
                                     <div class="col d-flex align-items-baseline justify-content-start px-3 py-md-0 py-4">
-                                        <div class="h1">105</div>
+                                        <div id="airQuality" class="h1">?</div>
                                     </div>
                                 </div>
                                 <div class="col">
-                                    <label class="px-3">UnHealty</label>
+                                    <label id="airQualityDescription" class="px-3">?</label>
                                     <i class="bi bi-soundwave"></i>
                                 </div>
                             </div>
@@ -378,58 +320,7 @@
             </div>
         </div>
     </div>
-    <script>
-        const demoElement = document.getElementById("demo");
-        function getLocation(){
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(setLocation);
-            } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
-            }
-        }
-        const apiKey = "ff5674fb5a1d9ecce355bad78fc30cfe";
-        function setLocation(position){
-            fetch('https://api.openweathermap.org/data/2.5/weather?lat='+position.coords.latitude+'&lon='+position.coords.longitude+'&appid='+apiKey)
-                .then(res=> {
-                    return res.json();
-                })
-                .then(data=>{
-                    demoElement.innerHTML = JSON.stringify(data);
-                })
-                .catch(error =>{
-                    console.log(error);
-                })
-        }
-        var currentTheme = "DayLight"; //It could be "DayLight" or "NightLight"
-        const weather_icons = [
-            "Weather Icons/"+currentTheme+"/cloudy.png",
-            "Weather Icons/"+currentTheme+"/night_storm.png",
-            "Weather Icons/"+currentTheme+"/partly_cloudy.png",
-            "Weather Icons/"+currentTheme+"/partly_day_storm.png",
-            "Weather Icons/"+currentTheme+"/Rain_storm.png",
-            "Weather Icons/"+currentTheme+"/rainy.png",
-            "Weather Icons/"+currentTheme+"/slight_touch_happyday.png",
-            "Weather Icons/"+currentTheme+"/snowy.png",
-            "Weather Icons/"+currentTheme+"/thunderstorm.png",
-        ];
-        // The following code snippit is used as a UV Index RoundSlider Script
-        var initialValue= 9;
-        $(document).ready(function(){
-            $("#myRange").roundSlider({
-                min:1,
-                max:12,
-                sliderType: "min-range",
-                handleSize:0,
-                width: 40,
-                radius: 100,
-                value: initialValue,
-                circleShape:"half-top",
-                editableTooltip:false,
-                readOnly:true,
-            });
-        });
-        
-        </script>
+<script src="src/scripts/script.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.3.2/roundslider.min.js" integrity="sha512-8GGAq5KYuHWyCNC5v3Ohfh3nmfVejHvZR7xM75AKq5QU7jFSOO/aCcZEKC+2Re4uGe7KL+h24KeZ8CEdd4FRog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/roundSlider/1.3.2/roundslider.css" integrity="sha512-WsA2qA1a+CIEz4KTrgjOlF1Gtn4M+m3pgyUCbgGrrV1GKqqM1EOmJSCSA0FXWsIgdv2SKE9ATGvqqEgN42ZjVg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </body>
