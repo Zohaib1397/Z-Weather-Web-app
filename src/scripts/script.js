@@ -58,8 +58,7 @@ function getLocation(){
         $('#demo').html("Geolocation is not supported by this browser.");
     }
 }
-const apiKey = "ff5674fb5a1d9ecce355bad78fc30cfe";
-// const apiKey = "b10f0f0f757582a3f65937ecdbef5e9b";
+
 function setLocation(latitude,longitude){
     fetch('https://api.open-meteo.com/v1/forecast?latitude='+latitude+'&longitude='+longitude+'&daily=temperature_2m_max,temperature_2m_min,uv_index_max,rain_sum&current_weather=true&timezone=auto')
         .then(res=> {
